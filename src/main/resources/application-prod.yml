@@ -1,0 +1,16 @@
+# 线上配置文件
+# @author shinkte
+# @from shinkte
+spring:
+  # DataSource Config
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: 'jdbc:mysql://sh-cynosdbmysql-grp-98pxrcoq.sql.tencentcdb.com:29164/matchsystem?useSSL=false'
+    username: root
+    password: ws15282018119
+  # session 失效时间
+  session:
+    timeout: 86400
+server:
+  address: 0.0.0.0
+
