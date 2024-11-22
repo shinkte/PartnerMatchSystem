@@ -1,13 +1,10 @@
-package com.shinkte.contant;
+package com.shinkte.model.dto;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.shinkte.Config.PageRequest;
+import com.shinkte.common.PageRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.Date;
-import java.util.List;
 
 
 /**

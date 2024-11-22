@@ -1,7 +1,8 @@
 package com.shinkte.service;
 
-import com.shinkte.domain.Team;
+import com.shinkte.model.domain.Team;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.shinkte.model.domain.User;
 
 /**
 * @author shinkte
@@ -9,5 +10,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2024-11-18 10:31:58
 */
 public interface TeamService extends IService<Team> {
+
+    long addTeam(Team team, User loginUser);
 
 }

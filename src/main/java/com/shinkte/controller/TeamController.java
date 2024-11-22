@@ -5,15 +5,18 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.shinkte.common.BaseResponse;
 import com.shinkte.common.ErrorCode;
 import com.shinkte.common.ResultUtils;
-import com.shinkte.contant.TeamQuery;
-import com.shinkte.domain.Team;
+import com.shinkte.model.domain.User;
+import com.shinkte.model.dto.TeamQuery;
+import com.shinkte.model.domain.Team;
 import com.shinkte.exception.BusinessException;
+import com.shinkte.model.request.TeamAddRequest;
 import com.shinkte.service.TeamService;
 import com.shinkte.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -34,15 +37,15 @@ public class TeamController {
     private TeamService teamService;
 
     @PostMapping("/add")
-    public BaseResponse<Long>  addTeam(@RequestBody Team team){
-        if (team ==null){
+    public BaseResponse<Long>  addTeam(@RequestBody TeamAddRequest teamAddRequest, HttpServletRequest  httpServletRequest){
+        if (teamAddRequest ==null){
             throw new BusinessException(ErrorCode.NULL_ERROR,"团队信息不能为空");
         }
-        boolean save = teamService.save(team);
-        if (!save){
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR,"保存团队信息失败");
-        }
-        return ResultUtils.success(save?team.getId():0L);
+        User loginUser = userService.getLoginUser(httpServletRequest);
+        Team team = new Team();
+        BeanUtils.copyProperties(teamAddRequest,team);
+        long l = teamService.addTeam(team, loginUser);
+        return ResultUtils.success(l);
     }
     @PostMapping("/delete")
     public BaseResponse<Boolean>  deleteTeam(@RequestBody long id ){

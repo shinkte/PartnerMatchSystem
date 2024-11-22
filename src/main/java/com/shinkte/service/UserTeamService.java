@@ -1,6 +1,6 @@
 package com.shinkte.service;
 
-import com.shinkte.domain.UserTeam;
+import com.shinkte.model.domain.UserTeam;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

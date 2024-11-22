@@ -1,4 +1,4 @@
-package com.shinkte.request;
+package com.shinkte.model.request;
 
 
 

@@ -1,6 +1,6 @@
 package com.shinkte.service;
 
-import com.shinkte.domain.Tag;
+import com.shinkte.model.domain.Tag;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

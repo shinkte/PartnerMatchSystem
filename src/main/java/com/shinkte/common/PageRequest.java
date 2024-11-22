@@ -1,4 +1,4 @@
-package com.shinkte.Config;
+package com.shinkte.common;
 
 import lombok.Data;
 
@@ -11,7 +11,7 @@ import java.io.Serializable;
  */
 @Data
 public class PageRequest implements Serializable {
-    private static final long serialVersionUID =;
+    private static final long serialVersionUID = 2349055607828088106L;
     /**
      * 页码
      */

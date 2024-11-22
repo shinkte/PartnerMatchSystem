@@ -1,16 +1,18 @@
-package com.shinkte.domain;
+package com.shinkte.model.domain;
 
-import com.baomidou.mybatisplus.annotation.*;
-
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 标签
- * @TableName tag
+ * 用户队伍关系
+ * @TableName user_team
  */
-@TableName(value ="tag")
-public class Tag implements Serializable {
+@TableName(value ="user_team")
+public class UserTeam implements Serializable {
     /**
      * id
      */
@@ -18,24 +20,19 @@ public class Tag implements Serializable {
     private Long id;
 
     /**
-     * 标签名称
-     */
-    private String tagName;
-
-    /**
-     * 用户 id
+     * 用户id
      */
     private Long userId;
 
     /**
-     * 父标签 id
+     * 队伍id
      */
-    private Long parentId;
+    private Long teamId;
 
     /**
-     * 0 - 不是, 1 - 父标签
+     * 加入时间
      */
-    private Integer isParent;
+    private Date joinTime;
 
     /**
      * 创建时间
@@ -50,7 +47,6 @@ public class Tag implements Serializable {
     /**
      * 是否删除
      */
-    @TableLogic
     private Integer isDelete;
 
     @TableField(exist = false)
@@ -71,59 +67,45 @@ public class Tag implements Serializable {
     }
 
     /**
-     * 标签名称
-     */
-    public String getTagName() {
-        return tagName;
-    }
-
-    /**
-     * 标签名称
-     */
-    public void setTagName(String tagName) {
-        this.tagName = tagName;
-    }
-
-    /**
-     * 用户 id
+     * 用户id
      */
     public Long getUserId() {
         return userId;
     }
 
     /**
-     * 用户 id
+     * 用户id
      */
     public void setUserId(Long userId) {
         this.userId = userId;
     }
 
     /**
-     * 父标签 id
+     * 队伍id
      */
-    public Long getParentId() {
-        return parentId;
+    public Long getTeamId() {
+        return teamId;
     }
 
     /**
-     * 父标签 id
+     * 队伍id
      */
-    public void setParentId(Long parentId) {
-        this.parentId = parentId;
+    public void setTeamId(Long teamId) {
+        this.teamId = teamId;
     }
 
     /**
-     * 0 - 不是, 1 - 父标签
+     * 加入时间
      */
-    public Integer getIsParent() {
-        return isParent;
+    public Date getJoinTime() {
+        return joinTime;
     }
 
     /**
-     * 0 - 不是, 1 - 父标签
+     * 加入时间
      */
-    public void setIsParent(Integer isParent) {
-        this.isParent = isParent;
+    public void setJoinTime(Date joinTime) {
+        this.joinTime = joinTime;
     }
 
     /**
@@ -179,12 +161,11 @@ public class Tag implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        Tag other = (Tag) that;
+        UserTeam other = (UserTeam) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getTagName() == null ? other.getTagName() == null : this.getTagName().equals(other.getTagName()))
             && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
-            && (this.getParentId() == null ? other.getParentId() == null : this.getParentId().equals(other.getParentId()))
-            && (this.getIsParent() == null ? other.getIsParent() == null : this.getIsParent().equals(other.getIsParent()))
+            && (this.getTeamId() == null ? other.getTeamId() == null : this.getTeamId().equals(other.getTeamId()))
+            && (this.getJoinTime() == null ? other.getJoinTime() == null : this.getJoinTime().equals(other.getJoinTime()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
             && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()))
             && (this.getIsDelete() == null ? other.getIsDelete() == null : this.getIsDelete().equals(other.getIsDelete()));
@@ -195,10 +176,9 @@ public class Tag implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getTagName() == null) ? 0 : getTagName().hashCode());
         result = prime * result + ((getUserId() == null) ? 0 : getUserId().hashCode());
-        result = prime * result + ((getParentId() == null) ? 0 : getParentId().hashCode());
-        result = prime * result + ((getIsParent() == null) ? 0 : getIsParent().hashCode());
+        result = prime * result + ((getTeamId() == null) ? 0 : getTeamId().hashCode());
+        result = prime * result + ((getJoinTime() == null) ? 0 : getJoinTime().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         result = prime * result + ((getUpdateTime() == null) ? 0 : getUpdateTime().hashCode());
         result = prime * result + ((getIsDelete() == null) ? 0 : getIsDelete().hashCode());
@@ -212,10 +192,9 @@ public class Tag implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", tagName=").append(tagName);
         sb.append(", userId=").append(userId);
-        sb.append(", parentId=").append(parentId);
-        sb.append(", isParent=").append(isParent);
+        sb.append(", teamId=").append(teamId);
+        sb.append(", joinTime=").append(joinTime);
         sb.append(", createTime=").append(createTime);
         sb.append(", updateTime=").append(updateTime);
         sb.append(", isDelete=").append(isDelete);

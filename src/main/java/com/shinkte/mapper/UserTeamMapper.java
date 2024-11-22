@@ -1,6 +1,6 @@
 package com.shinkte.mapper;
 
-import com.shinkte.domain.UserTeam;
+import com.shinkte.model.domain.UserTeam;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

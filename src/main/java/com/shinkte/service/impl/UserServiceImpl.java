@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.shinkte.common.ErrorCode;
 import com.shinkte.exception.BusinessException;
-import com.shinkte.domain.User;
+import com.shinkte.model.domain.User;
 import com.shinkte.service.UserService;
 import com.shinkte.mapper.UserMapper;
 

@@ -1,18 +1,16 @@
-package com.shinkte.domain;
+package com.shinkte.model.domain;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 队伍
- * @TableName team
+ * 标签
+ * @TableName tag
  */
-@TableName(value ="team")
-public class Team implements Serializable {
+@TableName(value ="tag")
+public class Tag implements Serializable {
     /**
      * id
      */
@@ -20,39 +18,24 @@ public class Team implements Serializable {
     private Long id;
 
     /**
-     * 队伍名称
+     * 标签名称
      */
-    private String name;
+    private String tagName;
 
     /**
-     * 描述
-     */
-    private String description;
-
-    /**
-     * 最大人数
-     */
-    private Integer maxNum;
-
-    /**
-     * 过期时间
-     */
-    private Date expireTime;
-
-    /**
-     * 用户id（队长 id）
+     * 用户 id
      */
     private Long userId;
 
     /**
-     * 0 - 公开，1 - 私有，2 - 加密
+     * 父标签 id
      */
-    private Integer status;
+    private Long parentId;
 
     /**
-     * 密码
+     * 0 - 不是, 1 - 父标签
      */
-    private String password;
+    private Integer isParent;
 
     /**
      * 创建时间
@@ -67,6 +50,7 @@ public class Team implements Serializable {
     /**
      * 是否删除
      */
+    @TableLogic
     private Integer isDelete;
 
     @TableField(exist = false)
@@ -87,101 +71,59 @@ public class Team implements Serializable {
     }
 
     /**
-     * 队伍名称
+     * 标签名称
      */
-    public String getName() {
-        return name;
+    public String getTagName() {
+        return tagName;
     }
 
     /**
-     * 队伍名称
+     * 标签名称
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setTagName(String tagName) {
+        this.tagName = tagName;
     }
 
     /**
-     * 描述
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * 描述
-     */
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    /**
-     * 最大人数
-     */
-    public Integer getMaxNum() {
-        return maxNum;
-    }
-
-    /**
-     * 最大人数
-     */
-    public void setMaxNum(Integer maxNum) {
-        this.maxNum = maxNum;
-    }
-
-    /**
-     * 过期时间
-     */
-    public Date getExpireTime() {
-        return expireTime;
-    }
-
-    /**
-     * 过期时间
-     */
-    public void setExpireTime(Date expireTime) {
-        this.expireTime = expireTime;
-    }
-
-    /**
-     * 用户id（队长 id）
+     * 用户 id
      */
     public Long getUserId() {
         return userId;
     }
 
     /**
-     * 用户id（队长 id）
+     * 用户 id
      */
     public void setUserId(Long userId) {
         this.userId = userId;
     }
 
     /**
-     * 0 - 公开，1 - 私有，2 - 加密
+     * 父标签 id
      */
-    public Integer getStatus() {
-        return status;
+    public Long getParentId() {
+        return parentId;
     }
 
     /**
-     * 0 - 公开，1 - 私有，2 - 加密
+     * 父标签 id
      */
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
     }
 
     /**
-     * 密码
+     * 0 - 不是, 1 - 父标签
      */
-    public String getPassword() {
-        return password;
+    public Integer getIsParent() {
+        return isParent;
     }
 
     /**
-     * 密码
+     * 0 - 不是, 1 - 父标签
      */
-    public void setPassword(String password) {
-        this.password = password;
+    public void setIsParent(Integer isParent) {
+        this.isParent = isParent;
     }
 
     /**
@@ -237,15 +179,12 @@ public class Team implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        Team other = (Team) that;
+        Tag other = (Tag) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
-            && (this.getDescription() == null ? other.getDescription() == null : this.getDescription().equals(other.getDescription()))
-            && (this.getMaxNum() == null ? other.getMaxNum() == null : this.getMaxNum().equals(other.getMaxNum()))
-            && (this.getExpireTime() == null ? other.getExpireTime() == null : this.getExpireTime().equals(other.getExpireTime()))
+            && (this.getTagName() == null ? other.getTagName() == null : this.getTagName().equals(other.getTagName()))
             && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
-            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
-            && (this.getPassword() == null ? other.getPassword() == null : this.getPassword().equals(other.getPassword()))
+            && (this.getParentId() == null ? other.getParentId() == null : this.getParentId().equals(other.getParentId()))
+            && (this.getIsParent() == null ? other.getIsParent() == null : this.getIsParent().equals(other.getIsParent()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
             && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()))
             && (this.getIsDelete() == null ? other.getIsDelete() == null : this.getIsDelete().equals(other.getIsDelete()));
@@ -256,13 +195,10 @@ public class Team implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
-        result = prime * result + ((getDescription() == null) ? 0 : getDescription().hashCode());
-        result = prime * result + ((getMaxNum() == null) ? 0 : getMaxNum().hashCode());
-        result = prime * result + ((getExpireTime() == null) ? 0 : getExpireTime().hashCode());
+        result = prime * result + ((getTagName() == null) ? 0 : getTagName().hashCode());
         result = prime * result + ((getUserId() == null) ? 0 : getUserId().hashCode());
-        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
-        result = prime * result + ((getPassword() == null) ? 0 : getPassword().hashCode());
+        result = prime * result + ((getParentId() == null) ? 0 : getParentId().hashCode());
+        result = prime * result + ((getIsParent() == null) ? 0 : getIsParent().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         result = prime * result + ((getUpdateTime() == null) ? 0 : getUpdateTime().hashCode());
         result = prime * result + ((getIsDelete() == null) ? 0 : getIsDelete().hashCode());
@@ -276,13 +212,10 @@ public class Team implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", name=").append(name);
-        sb.append(", description=").append(description);
-        sb.append(", maxNum=").append(maxNum);
-        sb.append(", expireTime=").append(expireTime);
+        sb.append(", tagName=").append(tagName);
         sb.append(", userId=").append(userId);
-        sb.append(", status=").append(status);
-        sb.append(", password=").append(password);
+        sb.append(", parentId=").append(parentId);
+        sb.append(", isParent=").append(isParent);
         sb.append(", createTime=").append(createTime);
         sb.append(", updateTime=").append(updateTime);
         sb.append(", isDelete=").append(isDelete);

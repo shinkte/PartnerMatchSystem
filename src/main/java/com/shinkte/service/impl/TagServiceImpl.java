@@ -1,7 +1,7 @@
 package com.shinkte.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.shinkte.domain.Tag;
+import com.shinkte.model.domain.Tag;
 import com.shinkte.service.TagService;
 import com.shinkte.mapper.TagMapper;
 import org.springframework.stereotype.Service;

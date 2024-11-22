@@ -3,7 +3,7 @@ package com.shinkte.job;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.shinkte.mapper.UserMapper;
-import com.shinkte.domain.User;
+import com.shinkte.model.domain.User;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;

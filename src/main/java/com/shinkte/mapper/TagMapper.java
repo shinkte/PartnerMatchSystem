@@ -1,6 +1,6 @@
 package com.shinkte.mapper;
 
-import com.shinkte.domain.Tag;
+import com.shinkte.model.domain.Tag;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

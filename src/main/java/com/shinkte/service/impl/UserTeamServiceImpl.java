@@ -1,7 +1,7 @@
 package com.shinkte.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.shinkte.domain.UserTeam;
+import com.shinkte.model.domain.UserTeam;
 import com.shinkte.service.UserTeamService;
 import com.shinkte.mapper.UserTeamMapper;
 import org.springframework.stereotype.Service;
