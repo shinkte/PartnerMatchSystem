@@ -7,13 +7,14 @@ import java.util.Date;
 
 /**
  * @Author: shinkte
- * @Description: 队伍表传输对象
- * @CreateTime: 2024-11-23
+ * @Description: 队伍表更新包装类
+ * @CreateTime: 2024-11-24
  */
 @Data
-public class TeamAddRequest implements Serializable {
-    private static  final long serialVersionUID = -3770853280971662538L;
+public class TeamUpdateRequest implements Serializable {
 
+    private static final long serialVersionUID = -2392565237015631868L;
+    private long id;
     /**
      * 队伍名称
      */
@@ -30,6 +31,11 @@ public class TeamAddRequest implements Serializable {
     private Integer maxNum;
 
     /**
+     * 密码
+     */
+    private String password;
+
+    /**
      * 过期时间
      */
     private Date expireTime;
@@ -37,6 +43,5 @@ public class TeamAddRequest implements Serializable {
      * 0 - 公开，1 - 私有，2 - 加密
      */
     private Integer status;
-
 
 }

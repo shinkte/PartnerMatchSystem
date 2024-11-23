@@ -10,6 +10,9 @@ import com.shinkte.model.dto.TeamQuery;
 import com.shinkte.model.domain.Team;
 import com.shinkte.exception.BusinessException;
 import com.shinkte.model.request.TeamAddRequest;
+import com.shinkte.model.request.TeamJionRequest;
+import com.shinkte.model.request.TeamUpdateRequest;
+import com.shinkte.model.vo.TeamUserVo;
 import com.shinkte.service.TeamService;
 import com.shinkte.service.UserService;
 import org.springframework.beans.BeanUtils;
@@ -59,15 +62,16 @@ public class TeamController {
         return ResultUtils.success(result);
     }
     @PostMapping("/update")
-    public BaseResponse<Long>  updateTeam(@RequestBody Team team){
-        if (team ==null){
+    public BaseResponse<Boolean>  updateTeam(@RequestBody TeamUpdateRequest teamUpdateRequest,HttpServletRequest  httpServletRequest){
+        if (teamUpdateRequest ==null){
             throw new BusinessException(ErrorCode.NULL_ERROR,"团队信息参数不能为空");
         }
-        boolean result = teamService.updateById(team);
+        User loginUser=userService.getLoginUser(httpServletRequest);
+        boolean result = teamService.updateTeam(teamUpdateRequest,loginUser);
         if (!result){
             throw new BusinessException(ErrorCode.SYSTEM_ERROR,"更新团队信息失败");
         }
-        return ResultUtils.success(result?team.getId():0L);
+        return ResultUtils.success(true);
     }
     @GetMapping("/get")
     public BaseResponse<Team> getTeam(long id){
@@ -80,7 +84,7 @@ public class TeamController {
         }
         return ResultUtils.success(team);
     }
-    @GetMapping("/list")
+/*    @GetMapping("/list")
     public BaseResponse<List<Team>> listTeam(TeamQuery teamQuery){
         if (teamQuery==null){
             throw new BusinessException(ErrorCode.NULL_ERROR,"团队信息参数不能为空");
@@ -90,7 +94,16 @@ public class TeamController {
         QueryWrapper<Team> queryWrapper = new QueryWrapper<>();
         List<Team> teamList= teamService.list(queryWrapper);
         return ResultUtils.success(teamList);
+    }*/
+@GetMapping("/list")
+public BaseResponse<List<TeamUserVo>> listTeam(TeamQuery teamQuery,HttpServletRequest  httpServletRequest){
+    if (teamQuery==null){
+        throw new BusinessException(ErrorCode.NULL_ERROR,"团队信息参数不能为空");
     }
+     boolean isAdmin= userService.isAdmin(httpServletRequest);
+    List<TeamUserVo> teamList= teamService.listTeamUser(teamQuery,isAdmin);
+    return ResultUtils.success(teamList);
+}
     @GetMapping("/list/page")
     public BaseResponse<Page<Team>> listTeamPage(TeamQuery teamQuery){
         if (teamQuery==null){
@@ -102,5 +115,15 @@ public class TeamController {
         QueryWrapper<Team> queryWrapper = new QueryWrapper<>(team);
         Page<Team> teamPage= teamService.page(page,queryWrapper);
         return ResultUtils.success(teamPage);
+    }
+    @PostMapping("/join")
+    public BaseResponse<Boolean> joinTeam(@RequestBody TeamJionRequest teamJionRequest,HttpServletRequest  httpServletRequest){
+    if (teamJionRequest==null){
+        throw new BusinessException(ErrorCode.NULL_ERROR,"团队信息参数不能为空");
+    }
+    User loginUser=userService.getLoginUser(httpServletRequest);
+    boolean result=teamService.joinTeam(teamJionRequest,loginUser);
+    return ResultUtils.success(result);
+
     }
 }
