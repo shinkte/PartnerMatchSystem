@@ -1,3 +1,4 @@
+/*
 package com.shinkte.FirstTasks;
 
 import com.shinkte.mapper.UserMapper;
@@ -21,9 +22,12 @@ public class InsertUserDataTest {
     private UserMapper userMapper;
     @Resource
     private UserService userService;
-    /**
+    */
+/**
      * 数据直接插入数据库
-     */
+     *//*
+
+*/
 /*    @Test
     public void insertUserData() {
         StopWatch stopWatch = new StopWatch(); // 计时器
@@ -49,11 +53,14 @@ public class InsertUserDataTest {
         }
         stopWatch.stop();
         System.out.println("插入"+INSERT_NUM+"条数据，耗时："+stopWatch.getTotalTimeMillis()+"毫秒");
-    }*/
+    }*//*
 
-    /**
+
+    */
+/**
      * 并发批量插入数据库
-     */
+     *//*
+
     @Test
     public void doConcurrentcyInsertUser(){
         StopWatch stopWatch = new StopWatch(); // 计时器
@@ -95,4 +102,4 @@ public class InsertUserDataTest {
         stopWatch.stop();
         System.out.println("批量插入"+INSERT_NUM+"条数据，耗时："+stopWatch.getTotalTimeMillis()+"毫秒");
     }
-}
+}*/

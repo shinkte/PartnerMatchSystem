@@ -4,12 +4,16 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.shinkte.Utils.AlogrithmUtils;
+import com.shinkte.common.BaseResponse;
 import com.shinkte.common.ErrorCode;
 import com.shinkte.exception.BusinessException;
 import com.shinkte.model.domain.User;
+import com.shinkte.model.vo.UserVo;
 import com.shinkte.service.UserService;
 import com.shinkte.mapper.UserMapper;
 
+import javafx.util.Pair;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -18,10 +22,7 @@ import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -320,6 +321,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return user != null && user.getUserRole() == ADMIN_ROLE;
     }
 
+
     /**
      * 判断当前用户是否为管理员
      * 方法重载
@@ -332,4 +334,107 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return loginUser != null && loginUser.getUserRole() == ADMIN_ROLE;
     }
 
+/*优化前方式，比较耗时
+@Override
+    public List<User> matchUser(long num, User loginUser) {
+        List<User> UserList = this.list();
+        String loginUsertags = loginUser.getTags();
+        //将tags转换为标签数组
+        Gson gson = new Gson();
+        List<String> loginUserTagList = gson.fromJson(loginUsertags, new TypeToken<List<String>>() {
+        }.getType());
+        //循环遍历数据库匹配
+        SortedMap<Integer,Long> indexDistanceMap =new TreeMap<>();
+        for (int i=0;i<UserList.size();i++){
+            User user=new User();
+            String userTags = user.getTags();
+            if (StringUtils.isBlank(userTags)){
+                continue;
+            }
+            List<String> userTagList = gson.fromJson(userTags, new TypeToken<List<String>>() {
+            }.getType());
+            //计算分数
+            long distance= AlogrithmUtils.minimumEditDistance(loginUserTagList,userTagList);
+            indexDistanceMap.put(i,distance);
+        }
+        List<Integer> maxDistanceIndexList = indexDistanceMap.keySet().stream().limit(num).collect(Collectors.toList());
+        List<User> userVoList=maxDistanceIndexList.stream()
+                .map(index->getSafetyUser(UserList.get(index)))
+                .collect(Collectors.toList());
+        return userVoList;
+    }*/
+
+    /**
+     * 优化后的方式数据库检索
+     * @param num
+     * @param loginUser
+     * @return
+     */
+    @Override
+    public List<User> matchUser(long num, User loginUser) {
+
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        //优化点一：去除空标签的用户查询,数据库会将[]判断为非空，导致查询结果为全部
+        queryWrapper.isNotNull("tags").ne("tags","[]");
+        //优化点二：只查询需要的数据，ID和tags===>性能提升50%
+        queryWrapper.select("id","tags");
+        List<User> UserList = this.list(queryWrapper);
+        String loginUsertags = loginUser.getTags();
+        //将tags转换为标签数组
+        Gson gson = new Gson();
+        List<String> loginUserTagList = gson.fromJson(loginUsertags, new TypeToken<List<String>>() {}.getType());
+
+    //循环遍历数据库匹配
+        //维护一个定长的数组，存放用户和分数
+        //Pair<User,Long>,User是用户对象，Long是分数，Pair通常用来存储键值对或者两个相关联的对象，思考为什么不适用map
+        List<Pair<User,Long>> list=new ArrayList<>();
+        //依次计算当前用户和所有用户的相似度
+        for (int i=0;i<UserList.size();i++){
+            User user=UserList.get(i);
+            String userTags = user.getTags();
+            //去除自己的条件
+            if (userTags==null ||userTags.isEmpty() || user.getId()==loginUser.getId()){
+                continue;
+            }
+            List<String> userTagList = gson.fromJson(userTags, new TypeToken<List<String>>() {}.getType());
+         //计算分数
+            long distance= AlogrithmUtils.minimumEditDistance(loginUserTagList,userTagList);
+            list.add(new Pair<>(user,distance));
+     }
+        /**
+         * 将List列表转换一个流，后对流进行排序（按分数从小到大排序），然后取前num个元素，最后将结果转换为List列表返回
+         * sorted(Comparator<T> comparator)：对流进行排序，Comparator<T>是一个比较器接口，用于比较两个元素的大小，使用方法为：
+         * (a,b)->(int)(a.getValue()-b.getValue())，a.getValue()和b.getValue()是两个元素的分数，a和b是流的两个元素。
+         */
+        List<Pair<User, Long>> topUserPairList = list.stream()
+                .sorted((a, b) -> (int) (a.getValue() - b.getValue()))
+                .limit(num)
+                .collect(Collectors.toList());
+
+        /**
+         * 将一个包含用户和距离的列表转换为流，然后将使用map处理其中每个Pair对象，并提取其中的用户ID，最后转换为List列表返回
+         * 其中map用于对流中的每个元素进行转换或映射
+         */
+        List<Long> userIdList=topUserPairList.stream()
+                .map(Pair->Pair.getKey().getId())
+                .collect(Collectors.toList());
+
+        //返回用户数据全部信息
+        QueryWrapper<User> queryWrapper1 = new QueryWrapper<>();
+        //会影响原有的排序，需要额外处理
+        queryWrapper1.in("id",userIdList);
+        /**
+         * 调用数据库查询，获取满足条件的User对象列表，然后将其返回的数据列表转换为流，后对每个元素调用getSafetyUser方法，最后将处理后的User对象按照Id分组，返回一个新的Map对象
+         * collect是对流中的数据进行聚合操作，Collectors.groupingBy(Function<? super T, ? extends K> keyExtractor)：用于将流中的元素按照keyExtractor指定的键进行分组，返回一个Map对象，其中key是分组的键，value是分组后的元素列表
+         */
+        Map<Long, List<User>> userIdUserListMap = this.list(queryWrapper1)
+                .stream()
+                .map(user -> getSafetyUser(user))
+                .collect(Collectors.groupingBy(User::getId));
+        List<User> matchUserLists=new ArrayList<>();
+        for (Long userId:userIdList){
+            matchUserLists.add(userIdUserListMap.get(userId).get(0));
+        }
+        return matchUserLists;
+    }
 }

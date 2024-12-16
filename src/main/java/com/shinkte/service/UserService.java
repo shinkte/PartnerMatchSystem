@@ -1,7 +1,9 @@
 package com.shinkte.service;
 
+import com.shinkte.common.BaseResponse;
 import com.shinkte.model.domain.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.shinkte.model.vo.UserVo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -86,4 +88,11 @@ public interface UserService extends IService<User> {
 
     boolean isAdmin(HttpServletRequest request);
 
+    /**
+     * 根据标签匹配用户
+     * @param num
+     * @param loginUser
+     * @return
+     */
+    List<User> matchUser(long num, User loginUser);
 }

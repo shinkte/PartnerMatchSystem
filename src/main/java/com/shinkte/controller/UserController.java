@@ -100,7 +100,7 @@ public class UserController {
     /**
      * 获取当前用户
      *
-     * @param HttpServletRequest :该对象主要获取与当前HTTO请求相关的信息，包括请求头、请求参数、会话信息等。
+     * @param request :该对象主要获取与当前HTTO请求相关的信息，包括请求头、请求参数、会话信息等。
      * @return
      */
     @GetMapping("/current")
@@ -200,5 +200,18 @@ public class UserController {
             throw new RuntimeException(e);
         }
         return ResultUtils.success(userPage);
+    }
+    /**
+     * 匹配标签相似度最高的用户
+     * @param request
+     * @return
+     */
+    @GetMapping("/match")
+    public BaseResponse<List<User>> matchUser(long num, HttpServletRequest request){
+        if (num<=0||num>10){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR,"num参数必须在1-10之间");
+        }
+        User loginUser = userService.getLoginUser(request);
+        return ResultUtils.success(userService.matchUser(num,loginUser));
     }
 }

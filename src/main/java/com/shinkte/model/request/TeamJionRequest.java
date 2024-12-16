@@ -17,7 +17,7 @@ public class TeamJionRequest implements Serializable {
     /**
      * 队伍名称
      */
-    private String TeanmId;
+    private long TeamId;
 
     private String passWord;
 

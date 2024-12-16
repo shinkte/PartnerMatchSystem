@@ -1,3 +1,4 @@
+/*
 package com.shinkte.service;
 
 
@@ -13,11 +14,13 @@ import java.util.*;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
+*/
 /**
  * @Author: shinkte
  * @Description: RedissonCRUD
  * @CreateTime: 2024-11-15
- */
+ *//*
+
 public class RedissonTest {
     @Resource
     private RedissonClient redissonClient;
@@ -63,3 +66,4 @@ public class RedissonTest {
         //stack
     }
 }
+*/

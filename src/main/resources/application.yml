@@ -30,6 +30,7 @@ server:      # 服务器配置
     session:               #会话配置（会话常用于存储用户的状态信息）
       cookie:              #cookie配置
         domain: localhost      # 设置cookie作用域，即所有请求都带上这个cookie。表示该cookie仅在localhost的上下文中有效。
+        same-site: none           # 设置cookie的 SameSite 属性，默认为 lax，表示同站点请求可以携带cookie。none 表示不允许跨站点请求携带cookie。
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: false
@@ -40,4 +41,3 @@ mybatis-plus:
       logic-delete-value: 1 # 逻辑已删除值(默认为 1)
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
 
-# [编程导航学习圈](https://t.zsxq.com/0emozsIJh) 连接万名编程爱好者，一起优秀！20000+ 小伙伴交流分享、40+ 大厂嘉宾一对一答疑、4000+ 编程问答参考、100+ 各方向编程交流群

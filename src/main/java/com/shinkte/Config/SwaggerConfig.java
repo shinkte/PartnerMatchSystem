@@ -21,8 +21,14 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 @EnableSwagger2WebMvc
 @Profile({"dev", "test"})   //版本控制访问
 
+
+//配置Swagger接口文档
 public class SwaggerConfig {
+
     @Bean(value = "defaultApi2")
+    /**
+     * @return
+     */
     public Docket defaultApi2() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
@@ -36,7 +42,7 @@ public class SwaggerConfig {
                 .build();
         }
         /**
-         * api 信息
+         * 该方法定义了API的基本信息，包括标题，描述，服务条款URL，联系人和版本
          * @return
          */
         private ApiInfo apiInfo() {
